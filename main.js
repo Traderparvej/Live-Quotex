@@ -7,19 +7,19 @@ function createWindow() {
         height: 900,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
-            nodeIntegration: true,
-            contextIsolation: false
+            nodeIntegration: false,
+            contextIsolation: true,
+            webSecurity: false  // Cross-origin / CORS avoid
         }
     });
 
-    // Load Quotex login URL
-    win.loadURL('https://broker-qx.pro/sign-up/?lid=1508486');
+    // Load valid Quotex trade URL
+    win.loadURL('https://market-qx.trade/en/trade');
 
-    // Prevent navigation to other sites
+    // Optional: prevent navigation to other sites
     win.webContents.on('will-navigate', (e, url) => {
-        if (!url.startsWith('https://broker-qx.pro')) e.preventDefault();
+        if (!url.startsWith('https://market-qx.trade')) e.preventDefault();
     });
 }
 
 app.whenReady().then(createWindow);
-
