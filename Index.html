@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sicret Monymanegment — Parvej</title>
+  <style>
+    :root{
+      --accent:#1f7aec;
+      --accent-dark:#155bb0;
+      --bg:#f5f7fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --success:#e6ffed;
+      --danger:#ffecec;
+      --radius:10px;
+      --mono: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--mono);
+      background:linear-gradient(180deg,#eef4ff 0%, #f5f7fb 100%);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    header{
+      background:linear-gradient(90deg,var(--accent),var(--accent-dark));
+      color:white;
+      padding:22px 18px;
+      border-bottom-left-radius:22px;
+      border-bottom-right-radius:22px;
+      box-shadow:0 6px 20px rgba(31,122,236,0.12);
+    }
+    .wrap{max-width:980px;margin:18px auto;padding:14px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#fff6,#ffffff11);
+      display:flex;align-items:center;justify-content:center;font-weight:700;color:white;
+      font-size:20px;background-color:#0b5ed7;box-shadow:0 6px 18px rgba(11,94,215,0.18)
+    }
+    h1{margin:0;font-size:20px}
+    p.lead{margin:8px 0 0;color:var(--muted);font-size:14px}
+
+    main{display:grid;grid-template-columns:1fr 420px;gap:16px;margin-top:18px}
+    @media (max-width:980px){ main{grid-template-columns:1fr; } }
+
+    .card{
+      background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 6px 18px rgba(14,20,30,0.04);
+    }
+
+    .section-title{font-weight:700;margin-bottom:8px}
+    label{display:block;font-size:13px;color:#374151;margin-top:8px}
+    input[type="number"], input[type="text"], select, textarea{
+      width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;margin-top:6px;font-size:14px;
+    }
+    .row{display:flex;gap:10px}
+    .row > *{flex:1}
+    button{background:var(--accent);color:white;border:0;padding:10px 14px;border-radius:8px;cursor:pointer}
+    button.secondary{background:#f3f4f6;color:#111;border:1px solid #e6e9ef}
+    .note{font-size:13px;color:var(--muted);margin-top:6px}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px;border:1px solid #f1f4f8;text-align:center;font-size:13px}
+    .win{background:var(--success)}
+    .loss{background:var(--danger)}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+    .footer{margin-top:14px;font-size:13px;color:var(--muted);text-align:center}
+    .small{font-size:12px;color:var(--muted)}
+
+    /* CSV download link style */
+    a.dl{display:inline-block;padding:8px 12px;border-radius:8px;background:#0f1724;color:white;text-decoration:none}
+    .bangla{font-family: "Noto Sans Bengali", "Roboto", Arial, sans-serif;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <div class="logo">SM</div>
+        <div>
+          <h1>Sicret Monymanegment</h1>
+          <p class="lead">Parvej-এর Masaniello-শৈলীর সহজ ক্যালকুলেটর — মূলধন রক্ষা করে স্মার্ট stake নির্ধারণ।</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <main>
+      <!-- LEFT: EXPLAIN + SIMULATOR -->
+      <section class="card">
+        <div class="section-title">সিস্টেম কনসেপ্ট (বাংলা) — সংক্ষিপ্ত</div>
+        <p class="small bangla">
+          Sicret Monymanegment একটি নিরাপদ Bankroll ম্যানেজমেন্ট টুল, যেখানে প্রতিটি ট্রেডের stake নির্ধারণ করা হয় আপনার কারেন্ট ব্যালান্সের একটি শতাংশ (Risk %)। আপনি Payout/Odds এবং প্রত্যাশিত উইন/লস সিরিজ বসিয়ে রিয়েল-টাইম সিমুলেশন চালাতে পারবেন।
+        </p>
+
+        <hr style="margin:12px 0">
+
+        <div class="section-title">Simulator / সিমুলেটর</div>
+        <div class="note">প্রাথমিক ধারা: stake = (Risk% × current_bankroll). জেতলে লাভ = stake × (payout - 1). হারলে stake বাদ যাবে।</div>
+
+        <label>Initial Capital (মূলধন €):</label>
+        <input id="initial" type="number" value="100" step="0.01">
+
+        <div class="row">
+          <div>
+            <label>Risk per Trade (%) — যেমন 2.39:</label>
+            <input id="risk" type="number" value="2.39" step="0.01">
+          </div>
+          <div>
+            <label>Payout / Odds (e.g., 1.90):</label>
+            <input id="payout" type="number" value="1.90" step="0.01">
+          </div>
+        </div>
+
+        <label>Total Events (তথ্যমাত্র — optional):</label>
+        <input id="events" type="number" value="15">
+
+        <label>Outcome Sequence (W = Win, L = Loss). উদাহরণ: <span class="small">WWLWLW</span></label>
+        <input id="sequence" type="text" placeholder="উদাহরণ: WWLWLW">
+
+        <div class="controls">
+          <button id="run">Run Simulation</button>
+          <button id="loadExample" class="secondary">Load Example</button>
+          <button id="clear" class="secondary">Clear</button>
+          <button id="exportCSV" class="secondary">Export CSV</button>
+        </div>
+
+        <div id="summary" style="margin-top:12px"></div>
+
+        <table id="logTable" style="display:none">
+          <thead>
+            <tr><th>#</th><th>Action</th><th>Stake (€)</th><th>Result</th><th>Bankroll After (€)</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div style="margin-top:12px" class="small">
+          টীকা: এটি শিক্ষা/পরিকল্পনা-উদ্দেশ্যে; লাইভ ট্রেডিং-এ গেলে দায় আপনিই বহন করবেন। Always manage risk and trade responsibly.
+        </div>
+      </section>
+
+      <!-- RIGHT: CONFIG + QUICK STATS -->
+      <aside class="card">
+        <div class="section-title">Quick Config</div>
+        <div class="small">
+          <b>Site:</b> Sicret Monymanegment<br>
+          <b>Creator:</b> Parvej<br>
+          <b>Method:</b> Masaniello-like dynamic % staking
+        </div>
+
+        <hr style="margin:12px 0">
+
+        <div class="section-title">Fast Controls</div>
+        <div class="small">
+          <label>Quick risk presets:</label>
+          <div style="display:flex;gap:8px">
+            <button class="preset" data-risk="1">1%</button>
+            <button class="preset" data-risk="2">2%</button>
+            <button class="preset" data-risk="2.39">2.39%</button>
+            <button class="preset" data-risk="3">3%</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Sample sequences</label>
+          <select id="sampleSeq">
+            <option value="">-- choose --</option>
+            <option value="WLWLWLWWWLLWLLW">Mixed (example)</option>
+            <option value="WWWWW">All Wins</option>
+            <option value="LLLLL">All Losses</option>
+            <option value="WLLWLLWLW">Volatile</option>
+          </select>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Session Quick Stats</label>
+          <div id="quickStats" class="small">No simulation yet.</div>
+        </div>
+
+        <div class="footer">
+          <div class="small">Made with ❤️ by Parvej — Sicret Monymanegment</div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // Helper: round to 2 decimal places carefully (digit-by-digit safe)
+    function round2(x){
+      // Work out using integer arithmetic to avoid floating surprises
+      const y = Math.round((Number(x) + Number.EPSILON) * 100);
+      return y / 100;
+    }
+
+    function renderRows(rows){
+      const table = document.getElementById('logTable');
+      const tbody = table.querySelector('tbody');
+      tbody.innerHTML = '';
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = r.action === 'Win' ? 'win' : (r.action === 'Loss' ? 'loss' : '');
+        tr.innerHTML = '<td>'+r.step+'</td><td>'+r.action+'</td><td>'+r.stake.toFixed(2)+'</td><td>'+r.result+'</td><td>'+r.bankroll.toFixed(2)+'</td>';
+        tbody.appendChild(tr);
+      });
+      table.style.display = rows.length ? 'table' : 'none';
+    }
+
+    function simulate(){
+      const initial = parseFloat(document.getElementById('initial').value) || 0;
+      let bankroll = round2(initial);
+      const riskPercent = (parseFloat(document.getElementById('risk').value) || 0) / 100;
+      const payout = parseFloat(document.getElementById('payout').value) || 1.0;
+      const seqRaw = (document.getElementById('sequence').value || '').toUpperCase();
+      const seq = seqRaw.replace(/[^WL]/g,'');
+      const rows = [];
+      let step = 0;
+      let wins = 0, losses = 0;
+
+      for(const c of seq){
+        step++;
+        const stake = round2(bankroll * riskPercent);
+        if(stake <= 0){
+          rows.push({step, action:'No Stake', stake:0, result:'-', bankroll:round2(bankroll)});
+          continue;
+        }
+        if(c === 'W'){
+          const profit = round2(stake * (payout - 1));
+          bankroll = round2(bankroll + profit);
+          rows.push({step, action:'Win', stake, result:'+'+profit.toFixed(2), bankroll});
+          wins++;
+        } else {
+          bankroll = round2(bankroll - stake);
+          rows.push({step, action:'Loss', stake, result:'-'+stake.toFixed(2), bankroll});
+          losses++;
+          if(bankroll <= 0){ bankroll = 0; break; }
+        }
+      }
+
+      // render summary
+      const endBalance = rows.length ? rows[rows.length-1].bankroll : initial;
+      const summary = document.getElementById('summary');
+      summary.innerHTML = '<div class="small"><strong>Start:</strong> €'+initial.toFixed(2)+' — <strong>End:</strong> €'+endBalance.toFixed(2)+' — <strong>Trades:</strong> '+rows.length+'</div>';
+      document.getElementById('quickStats').innerText = `Wins: ${wins} | Losses: ${losses} | End Balance: €${endBalance.toFixed(2)}`;
+      renderRows(rows);
+
+      // store lastRows for CSV export
+      window.__lastSimulation = {rows, meta:{initial, endBalance, wins, losses, trades:rows.length}};
+    }
+
+    document.getElementById('run').addEventListener('click', simulate);
+    document.getElementById('clear').addEventListener('click', ()=> {
+      document.getElementById('sequence').value = '';
+      document.getElementById('logTable').style.display = 'none';
+      document.getElementById('summary').innerHTML = '';
+      document.getElementById('quickStats').innerText = 'Cleared';
+      window.__lastSimulation = null;
+    });
+
+    document.getElementById('loadExample').addEventListener('click', ()=> {
+      document.getElementById('sequence').value = 'WLWLWLWWWLLWLLW';
+      simulate();
+    });
+
+    // Preset risk buttons
+    document.querySelectorAll('.preset').forEach(btn=>{
+      btn.addEventListener('click', ()=> {
+        const val = btn.getAttribute('data-risk');
+        document.getElementById('risk').value = val;
+      });
+    });
+
+    // Sample sequence select
+    document.getElementById('sampleSeq').addEventListener('change', function(){
+      const v = this.value;
+      if(v){ document.getElementById('sequence').value = v; simulate(); }
+    });
+
+    // CSV Export
+    function downloadCSV(filename, csvContent){
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
+    document.getElementById('exportCSV').addEventListener('click', ()=>{
+      const sim = window.__lastSimulation;
+      if(!sim || !sim.rows || sim.rows.length === 0){
+        alert('কোনো সিমুলেশন পাওয়া যায়নি — আগে Run দিন।');
+        return;
+      }
+      const meta = sim.meta || {};
+      const header = ['Step','Action','Stake','Result','BankrollAfter'];
+      const lines = [];
+      lines.push('Sicret Monymanegment Simulation');
+      lines.push(`Initial:${meta.initial || ''}, End:${meta.endBalance || ''}, Trades:${meta.trades || ''}, Wins:${meta.wins || ''}, Losses:${meta.losses || ''}`);
+      lines.push('');
+      lines.push(header.join(','));
+      sim.rows.forEach(r=>{
+        lines.push([r.step, r.action, r.stake.toFixed(2), r.result.replace(',',''), r.bankroll.toFixed(2)].join(','));
+      });
+      const csv = lines.join('\n');
+      const fname = 'sicret_simulation_'+(new Date()).toISOString().slice(0,19).replace(/[:T]/g,'-')+'.csv';
+      downloadCSV(fname, csv);
+    });
+
+    // Initialize quick
+    document.getElementById('quickStats').innerText = 'Ready — set Initial, Risk, Payout and enter sequence then Run.';
+  </script>
+</body>
+</html>
